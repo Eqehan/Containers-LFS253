@@ -1,0 +1,131 @@
+*** Virtualization Fundamentals ***
+
+Control groups, known as cgroups, are a feature of the Linux kernel allowing the limitation, accounting, and isolation of resources used by groups of processes and their subgroups.
+Cgroups are a fundamental feature of various Operating System level virtualization mechanisms, such as OpenVZ and LXC.
+>Containers benefit from cgroups primarily because they allow system resources to be limited for processes grouped by a container
+
+Namespaces are a feature of the Linux kernel allowing groups of processes to have limited visibility of the host system resources.
+Namespaces may limit the visibility of cgroups, hostname, process IDs, IPC mechanisms, network interfaces and routes, users, and mounted file systems.
+
+UnionFS is a feature found in the Linux, FreeBSD and NetBSD kernels, allowing the overlay of separate transparent file systems to produce an apparent single unified file system.
+>In a container, unionfs allows for changes to be made to the container image at runtime.
+
+*** Virtualization Mechanisms ***
+Both VMs and Containers are products of virtualization methods and provide resources isolation for running applications, but the main differences surround the underlying technologies and management methods.
+A Virtual Machine is created on top of a hypervisor software, which may be installed over a host operating system (OS) or directly on a bare-metal system without a host OS.
+a container is a light-weight environment that virtualizes and isolates resources for a running application - typically a microservice.
+
+Chroot
+Chroot is a mechanism implementing OS-level virtualization.
+Chroot may be used to create a test environment to safely and securely test new software, to manage and isolate dependencies, and to recover an unbootable system.
+
+FreeBSD Jails
+A FreeBSD jail is a mechanism implementing OS-level virtualization with very little overhead. It was first introduced in 2000 on FreeBSD systems.
+FreeBSD jail allows for the partitioning of a FreeBSD system into many independent systems, called jails. 
+They share the same kernel, but virtualize the system’s files and resources for improved security and administration through clean isolation between services.
+
+Solaris Zones
+A Solaris zone is a mechanism implementing OS-level virtualization.
+Solaris zones represent securely isolated Virtual Machines on a single host system.
+
+OpenVZ
+OpenVZ is a mechanism implementing OS-level virtualization
+OpenVZ allows a physical host to run multiple isolated virtual instances - called containers, virtual environments or virtual private servers. 
+OpenVZ containers share the same kernel, and can only run Linux.
+
+Linux Containers (LXC)
+LXC, or Linux Containers, is a mechanism implementing OS-level virtualization.
+LXC allows multiple isolated systems to run on a single Linux host, using chroot and cgroups, together with namespace isolation features of the Linux kernel to limit resources, set priorities, and isolate processes, the filesystem, network and users from the host operating system.
+
+Systemd-nspawn
+Systemd-nspawn is a mechanism implementing OS-level virtualization.
+Systemd-nspawn may be used to run a simple script or boot an entire Linux-like operating system in a container. 
+Systemd-nspawn fully isolates containers from each other and from the host system.
+
+*** CONTAINER STANDARDS AND RUNTIMES***
+The Open Container Initiative (OCI) 
+It was introduced in 2015 by Docker together with other leaders in the container industry.
+
+
+*** IMAGE OPERATIONS ***
+>>Container Image Operations with Docker
+FROM to initialize the image build and specify the base image used as starting point for the current build,
+COPY to populate the container’s filesystem with existing directories or files from the host system,
+RUN to execute commands that alter the base image and commit the changes,
+CMD to provide defaults for the running container,
+ENTRYPOINT to configure a container’s command line arguments by overriding defaults specified by CMD,
+LABEL to add metadata in a key-value pair format to the image,
+EXPOSE to specify the port number and protocol which should be published as options with the docker run command,
+ENV to set environment variables in a key-value pair format,
+VOLUME to mount storage in the container,
+USER to set the user name and possibly the group name at runtime.
+
+docker build
+ docker container commit
+docker export
+docker image load
+ docker image history
+docker image tag
+
+podman
+podman image build
+podman commit, or podman container commit
+podman import
+ podman export
+ podman save
+podman load
+podman images,
+
+containerization tools such as Podman and Buildah have also adopted a similar approach to building container images from Dockerfiles
+Dockerfile Alternative: Containerfile
+.dockerignore : If we want to exclude some files and directories during the ​ docker image build​ process, then we should list them in the .dockerignore​
+
+
+*** CONTAINER NETWORKING ***
+The CNM specifies a set of objects for a container to join a network and be able to talk to other containers that are part of that network. The CNM specifies a network sandbox, an isolated networking stack inside the container which may support multiple individual networks through endpoints.
+The Container Network Interface (CNI), a Cloud Native Computing Foundation Incubator project, is the container network.
+It links container platforms such as Kubernetes and Cloud Foundry to multiple distinct container network implementations. (CNI)
+
+Docker Networking Drivers
+bridge, host, overlay,macvlan
+-internal mode: We can isolate an overlay network with the internal mode,
+-ingredd mode: This mode targets the networking of swarms, and implements a routing-mesh across the hosts of a swarm cluster. 
+
+Container Networking with Podman
+-bridge:The default network type that Podman builds for its containers is the bridge network, implemented by the bridge driver.
+-macvlan:The macvlan network driver enables a container to be directly connected to the physical network of the host system instead of having its traffic routed through the host network. 
+
+Container Networking with CRI-O
+Kubernetes container runtime, has its networking designed to work with Kubernetes pods.
+
+UnionFS is used by Docker to overlay a base container image with storage layers, such as ephemeral storage layer, custom storage layer, and config layer at the time a new container is created
+The Copy-on-Write (CoW) strategy of UnionFS allows users to “indirectly” modify the content of files available to the running container from the base container image storage layer. 
+
+>Manage Storage with CRI-O
+CRI-O also uses the Copy-on-Write (CoW) strategy in conjunction with the containers/storage library when unpacking a downloaded container image into the root filesystem of a container.
+It implements a variety of storage drivers, such as overlayfs, devicemapper, AUFS and btrfs, with overlayfs being the default storage driver.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
